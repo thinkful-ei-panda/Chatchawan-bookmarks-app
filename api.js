@@ -3,30 +3,44 @@ const username = "chatchawan";
 const BASE_URL = `https://thinkful-list-api.herokuapp.com/${username}`;
 
 function getBookmarks() {
-  console.log(listApiFetch(`${BASE_URL}/items`))
+  return listApiFetch(`${BASE_URL}/items`);
 }
 
-let bodyContent = JSON.stringify({ name : 'testBody', url : "https:/google.com", desc : "testDesc", rating : "5"});
-
+let bodyContent = JSON.stringify({
+  name: "testBody",
+  url: "https:/google.com",
+  desc: "testDesc",
+  rating: "5",
+  checked: "true",
+});
 
 //make a new bookmark item on the server
-function createBookmark() {
+function createBookmark(
+  newBookmarkName,
+  newBookmarkUrl,
+  newBookmarkDescription,
+  newBookmarkRating
+) {
   return listApiFetch(`${BASE_URL}/items`, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
     },
-    body: bodyContent,
-  })
+    body: {
+      'name' : newBookmarkName,
+      'url' : newBookmarkUrl,
+      'desc' : newBookmarkDescription,
+      'rating' : newBookmarkRating
+    },
+  });
 }
 
 //find  and delete a server item
 function deleteBookmark(id) {
   return listApiFetch(BASE_URL + "/items/" + id, {
     method: "DELETE",
-  })
+  });
 }
-
 
 function showData(data) {
   console.log(data);
@@ -66,7 +80,7 @@ function listApiFetch(...args) {
       // otherwise, return the json as normal resolved Promise
       return data;
     });
-};
+}
 
 export default {
   getBookmarks,
