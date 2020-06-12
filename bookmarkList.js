@@ -33,7 +33,10 @@ function generateBookmarkForm() {
     <div>
     <p>This is the bookmark form!</p>
     <form id="js-bookmark-list-form">
-      <input type="text" class="js-bookmark-name-entry"></input>
+      <input type="text" class="js-bookmark-name-entry" required />
+      <input type="text" class="js-bookmark-url-entry" required />
+      <input type="text" class="js-bookmark-description-entry" required />
+      <input type="text" class="js-bookmark-rating-entry" required />
       <button type="submit">Test button</button>
     </form>
     </div>
@@ -133,7 +136,17 @@ function handleGoToSite() {
   // listen to Go To Site button on bookmark element, open site in new tab when pressed
 }
 
+function bindEventListeners() {
+  // bind all event listeners at the start
+  handleGoToSite();
+  handleFilterSelect();
+  handleBookmarkDelete();
+  handleBookmarkExpand();
+  handleNewBookmarkSubmit();
+}
+
 export default {
   render,
   generateBookmarkItemsString,
+  bindEventListeners
 };
