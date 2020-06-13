@@ -14,6 +14,9 @@ function main() {
 
 //   api.createBookmark();
   console.log(api.getBookmarks());
+
+  bookmarkList.bindEventListeners();
+  bookmarkList.render();
 }
 
 main();

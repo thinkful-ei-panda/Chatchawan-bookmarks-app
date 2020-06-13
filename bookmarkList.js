@@ -33,10 +33,17 @@ function generateBookmarkForm() {
     <div>
     <p>This is the bookmark form!</p>
     <form id="js-bookmark-list-form">
-      <input type="text" class="js-bookmark-name-entry" required />
-      <input type="text" class="js-bookmark-url-entry" required />
-      <input type="text" class="js-bookmark-description-entry" required />
-      <input type="text" class="js-bookmark-rating-entry" required />
+      <input type="text" placeholder="Title" class="js-bookmark-name-entry" required />
+      <input type="text" placeholder="https://someWebsite.com" class="js-bookmark-url-entry" required />
+      <input type="text" placeholder="Your description here" class="js-bookmark-description-entry" required />
+      <div class="dropdown">
+        <button class="dropbtn">Dropdown</button>
+        <div id="myDropdown" class="dropdown-content">
+          <a href="#">Link 1</a>
+          <a href="#">Link 2</a>
+          <a href="#">Link 3</a>
+        </div>
+      </div>
       <button type="submit">Test button</button>
     </form>
     </div>
@@ -91,6 +98,7 @@ function handleNewBookmarkSubmit() {
   $("#js-bookmark-list-form").submit(function (event) {
     console.log("Submit button pressed");
     event.preventDefault();
+    event.stopPropgation();
     const newBookmarkName = $(".js-bookmark-name-entry").val();
     const newBookmarkUrl = $(".js-bookmark-url-entry").val();
     const newBookmarkDescription = $(".js-bookmark-description-entry").val();
@@ -148,5 +156,5 @@ function bindEventListeners() {
 export default {
   render,
   generateBookmarkItemsString,
-  bindEventListeners
+  bindEventListeners,
 };
