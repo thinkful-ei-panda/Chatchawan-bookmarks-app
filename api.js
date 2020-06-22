@@ -1,49 +1,27 @@
 // all api functions go here
-const username = "chatchawan";
+const username = 'chatchawan';
 const BASE_URL = `https://thinkful-list-api.herokuapp.com/${username}`;
 
 function getBookmarks() {
-  return listApiFetch(`${BASE_URL}/items`);
+  return listApiFetch(`${BASE_URL}/bookmarks`);
 }
 
-let bodyContent = JSON.stringify({
-  name: "testBody",
-  url: "https:/google.com",
-  desc: "testDesc",
-  rating: "5",
-  checked: "true",
-});
-
 //make a new bookmark item on the server
-function createBookmark(
-  newBookmarkName,
-  newBookmarkUrl,
-  newBookmarkDescription,
-  newBookmarkRating
-) {
-  return listApiFetch(`${BASE_URL}/items`, {
-    method: "POST",
+function createBookmark(requestBody) {
+  return listApiFetch(`${BASE_URL}/bookmarks`, {
+    method: 'POST',
     headers: {
-      "Content-type": "application/json",
+      'Content-type': 'application/json',
     },
-    body: {
-      'name' : newBookmarkName,
-      'url' : newBookmarkUrl,
-      'desc' : newBookmarkDescription,
-      'rating' : newBookmarkRating
-    },
+    body: requestBody
   });
 }
 
 //find  and delete a server item
 function deleteBookmark(id) {
-  return listApiFetch(BASE_URL + "/items/" + id, {
-    method: "DELETE",
+  return listApiFetch(BASE_URL + '/bookmarks/' + id, {
+    method: 'DELETE',
   });
-}
-
-function showData(data) {
-  console.log(data);
 }
 
 //straight up stole this function from the previous day's work
@@ -58,7 +36,7 @@ function listApiFetch(...args) {
 
         // if response is not JSON type, place statusText in error object and
         // immediately reject promise
-        if (!res.headers.get("content-type").includes("json")) {
+        if (!res.headers.get('content-type').includes('json')) {
           error.message = res.statusText;
           return Promise.reject(error);
         }

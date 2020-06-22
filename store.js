@@ -1,30 +1,18 @@
 // all local storage functions go here
 // remember that the bookmarks is empty at the start and at evey refresh
 
-const bookmarks = [
-  {
-    id: "xj9",
-    title: "testTitle",
-    rating: 1,
-    url: "http://www.google.com",
-    description: "testDesc",
-  },
-  {
-    id: "xj8",
-    title: "testTitle2",
-    rating: 2,
-    url: "http://www.google2.com",
-    description: "testDesc2",
-  },
-];
+const bookmarks = [];
 
 let error = null;
+
+let filter = 0;
 
 const findById = function (id) {
   return this.bookmarks.find((currentItem) => currentItem.id === id);
 };
 
 const addItem = function (item) {
+  item.condensed = true;
   bookmarks.push(item);
 };
 
@@ -51,4 +39,5 @@ export default {
   findAndDelete,
   findAndUpdate,
   setError,
+  filter
 };
