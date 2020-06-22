@@ -42,9 +42,9 @@ function generateBookmarkForm() {
     <div>
     <p>Please enter your bookmark</p>
     <form id='js-bookmark-list-form'>
-      <input value='testTitle' type='text' placeholder='Title' id='js-bookmark-title-entry' required />
-      <input value='https://someWebsite.com' type='url' placeholder='https://someWebsite.com' id='js-bookmark-url-entry' required />
-      <input value='testDesc'type='text' placeholder='Your description here' id='js-bookmark-description-entry' required />
+      <input type='text' placeholder='Title' id='js-bookmark-title-entry' required />
+      <input type='url' placeholder='https://someWebsite.com' id='js-bookmark-url-entry' required />
+      <input type='text' placeholder='Your description here' id='js-bookmark-description-entry' required />
       
       <select name='stars' id='js-rating-dropdown' required>
         <option value=''>Choose a rating</option>
