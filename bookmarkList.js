@@ -72,20 +72,23 @@ function generateFilter(currentFilter) {
         <option value='5'>&#x2B50&#x2B50&#x2B50&#x2B50&#x2B50</option>
         </select>
         <button type='submit'>Filter</button>
-  </form>`
+  </form>`;
 }
 
 function generateBookmarkItemsString(bookmarkList) {
-  const items = bookmarkList.filter(item => item.rating >= store.filter).map((mappedItem) => {
-    if (mappedItem.condensed === false) {
-      //if condensed is false, generate the expanded element
-      return (
-        generateBookmarkElement(mappedItem) + generateBookmarkElementExpansion(mappedItem)
-      );
-    } else {
-      return generateBookmarkElement(mappedItem);
-    }
-  }); 
+  const items = bookmarkList
+    .filter((item) => item.rating >= store.filter)
+    .map((mappedItem) => {
+      if (mappedItem.condensed === false) {
+        //if condensed is false, generate the expanded element
+        return (
+          generateBookmarkElement(mappedItem) +
+          generateBookmarkElementExpansion(mappedItem)
+        );
+      } else {
+        return generateBookmarkElement(mappedItem);
+      }
+    });
   return items.join(' ');
 }
 
@@ -110,14 +113,11 @@ function generateError(message) {
 function render() {
   // Filter item list if store prop is true by item.checked === false
   let bookmarks = [...store.bookmarks];
-  //   if (store.hideCheckedItems) {
-  //     items = items.filter((item) => !item.checked);
-  //   }
 
-  // render the shopping list in the DOM
+  // generate the shopping list html
   const bookmarkListItemsString = generateBookmarkItemsString(bookmarks);
   const form = generateBookmarkForm();
-  const ratingFilter = generateFilter(store.filter)
+  const ratingFilter = generateFilter(store.filter);
 
   // insert that HTML into the DOM
   $('main').html(form + ratingFilter + bookmarkListItemsString);
@@ -215,15 +215,13 @@ function handleBookmarkDelete() {
   $('main').on('click', '#js-delete-button', function (event) {
     event.preventDefault();
     event.stopPropagation();
-    console.log($(event.currentTarget).closest('div').attr('data-item-id'));
-    store.findAndDelete(
-      $(event.currentTarget).closest('div').attr('data-item-id')
-    );
-    console.log(store.bookmarks);
-    api.deleteBookmark(
-      $(event.currentTarget).closest('div').attr('data-item-id')
-    );
-    render();
+    const bookmarkId = $(event.currentTarget)
+      .closest('div')
+      .attr('data-item-id');
+    api.deleteBookmark(bookmarkId).then(() => {
+      store.findAndDelete(bookmarkId);
+      render();
+    });
   });
 }
 
@@ -232,9 +230,7 @@ function handleFilterSelect() {
   $('main').on('submit', '#js-rating-filter-form', function (event) {
     event.preventDefault();
     event.stopPropagation();
-    console.log($('#js-rating-filter-dropdown').val())
     store.filter = $('#js-rating-filter-dropdown').val();
-    console.log(`filter selected ${store.filter}`)
     render();
   });
 }
