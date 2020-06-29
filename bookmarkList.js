@@ -32,7 +32,7 @@ function generateBookmarkElementExpansion(item) {
   return `
     <div class='expanded-box' data-item-id='${item.id}'>
     <span class='bookmark-item'><br>Description: ${item.desc} </span>
-    <button id='js-delete-button'>Delete</button>
+    <button data-item-id='${item.id}' id='js-delete-button'>Delete</button>
     </div>
     `;
 }
@@ -42,12 +42,12 @@ function generateBookmarkForm() {
     <div>
     <p>Please enter your bookmark</p>
     <form id='js-bookmark-list-form'>
-      <input type='text' placeholder='Title' id='js-bookmark-title-entry' required />
-      <input type='url' placeholder='https://someWebsite.com' id='js-bookmark-url-entry' required />
-      <input type='text' placeholder='Your description here' id='js-bookmark-description-entry' required />
+      <input value='titleText' type='text' placeholder='Title' id='js-bookmark-title-entry' required />
+      <input value='https://google.com' type='url' placeholder='https://someWebsite.com' id='js-bookmark-url-entry' required />
+      <input value='descText' type='text' placeholder='Your description here' id='js-bookmark-description-entry' required />
       
       <select name='stars' id='js-rating-dropdown' required>
-        <option value=''>Choose a rating</option>
+        <option value='1'>Choose a rating</option>
         <option value='1'>&#x2B50</option>
         <option value='2'>&#x2B50&#x2B50</option>
         <option value='3'>&#x2B50&#x2B50&#x2B50</option>
@@ -179,7 +179,7 @@ function handleNewBookmarkSubmit() {
 
     api
       .createBookmark(newItem)
-      .then((newItem) => {
+      .then(newItem => {
         store.addItem(newItem);
         render();
       })
@@ -215,13 +215,10 @@ function handleBookmarkDelete() {
   $('main').on('click', '#js-delete-button', function (event) {
     event.preventDefault();
     event.stopPropagation();
-    const bookmarkId = $(event.currentTarget)
-      .closest('div')
-      .attr('data-item-id');
-    api.deleteBookmark(bookmarkId).then(() => {
-      store.findAndDelete(bookmarkId);
-      render();
-    });
+    const bookmarkId = $(event.currentTarget).attr('data-item-id');
+    api.deleteBookmark(bookmarkId)
+      .then(() => store.findAndDelete(bookmarkId))
+      .then(() => render())
   });
 }
 
