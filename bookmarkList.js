@@ -19,7 +19,7 @@ function generateBookmarkElement(item) {
     stars += '⭐';
   }
   return `
-  <div class='box' data-item-id='${item.id}'>
+  <div class='js-bookmark-item box' data-item-id='${item.id}'>
     <ul>
       <li>
         <span class='bookmark-item'><h3>${item.title}</h3></span>
@@ -37,9 +37,15 @@ function generateBookmarkElement(item) {
 function generateBookmarkElementExpansion(item) {
   return `
     <div class='expanded-box' data-item-id='${item.id}'>
-    <span class='bookmark-item'><br>Description: ${item.desc} </span>
-    <button data-item-id='${item.id}' id='js-delete-button'>Delete</button>
-    <button data-item-id='${item.id}' id='js-visit-site-button'>Visit Site</button>
+      <ul>
+        <li>
+          <span class='bookmark-item'><br>Description: ${item.desc} </span>
+        </li>
+        <li>
+          <button data-item-id='${item.id}' id='js-delete-button'>Delete</button>
+          <button data-item-id='${item.id}' id='js-visit-site-button'>Visit Site</button>
+        </li>
+      </ul>
     </div>
     `;
 }
@@ -60,20 +66,20 @@ function generateBookmarkForm() {
           <ul>
             <li>
               <label for='bookmarkName'>Bookmark name</label>
-              <input id='bookmarkName' name='bookmarkName' type='text' placeholder='Title' id='js-bookmark-title-entry' required />
+              <input id='bookmarkName' name='bookmarkName' type='text' placeholder='Title' required />
             </li>
             <li>
               <label for='url'>Website URL</label>
-              <input id='url' name='url' type='url' placeholder='https://someWebsite.com' id='js-bookmark-url-entry' required />
+              <input id='url' name='url' type='url' placeholder='https://someWebsite.com' required />
             </li>
             <li>
               <label for='desc'>Description</label>
-              <input id='desc' name='desc' type='text' placeholder='Your description here' id='js-bookmark-description-entry' required />
+              <input id='desc' name='desc' type='text' placeholder='Your description here' required />
             </li>
             <li>
               <label for='stars'>Rating</label>
-              <select id='stars' name='stars' id='js-rating-dropdown' required>
-                <option value='1'>Choose a rating</option>
+              <select id='stars' name='stars' required>
+                <option value=''>Choose a rating</option>
                 <option value='1'>&#x2B50</option>
                 <option value='2'>&#x2B50&#x2B50</option>
                 <option value='3'>&#x2B50&#x2B50&#x2B50</option>
@@ -93,7 +99,7 @@ function generateFilter(currentFilter) {
   return `<form id='js-rating-filter-form'>
   <label for='js-rating-filter-dropdown'>Choose minimum rating to show</label>
   <select name='rating' id='js-rating-filter-dropdown' required>
-        <option value=''>Current filter: ${currentFilter}</option>
+        <option value=''>Choose a filter</option>
         <option value='1'>&#x2B50</option>
         <option value='2'>&#x2B50&#x2B50</option>
         <option value='3'>&#x2B50&#x2B50&#x2B50</option>
@@ -190,14 +196,14 @@ function handleNewBookmarkSubmit() {
     event.stopPropagation();
 
     // grab all the values from the form and assign them to variables
-    const bookmarkTitle = $('#js-bookmark-title-entry').val();
-    const bookmarkUrl = $('#js-bookmark-url-entry').val();
-    const bookmarkDescription = $('#js-bookmark-description-entry').val();
-    const bookmarkRating = $('#js-rating-dropdown').val();
-    $('#js-bookmark-title-entry').val('');
-    $('#js-bookmark-url-entry').val('');
-    $('#js-bookmark-description-entry').val('');
-    $('#js-bookmark-rating-entry').val('');
+    const bookmarkTitle = $('#bookmarkName').val();
+    const bookmarkUrl = $('#url').val();
+    const bookmarkDescription = $('#desc').val();
+    const bookmarkRating = $('#stars').val();
+    $('#bookmarkName').val('');
+    $('#url').val('');
+    $('#desc').val('');
+    $('#stars').val('');
 
     const newItem = stringifiedObject(
       bookmarkTitle,
@@ -221,7 +227,7 @@ function handleNewBookmarkSubmit() {
 
 function handleBookmarkExpand() {
   // listen to the li element of the bookmark, set condensed prop to true, re-render
-  $('main').on('click', '#js-bookmark-item', function (event) {
+  $('main').on('click', '.js-bookmark-item', function (event) {
     event.preventDefault();
     event.stopPropagation();
     let source = {};
@@ -267,6 +273,7 @@ function handleFilterSelect() {
     event.preventDefault();
     event.stopPropagation();
     store.filter = $('#js-rating-filter-dropdown').val();
+    console.log(store.filter)
     render();
   });
 }
