@@ -19,12 +19,18 @@ function generateBookmarkElement(item) {
     stars += '⭐';
   }
   return `
-  <div class='box' id='js-bookmark-item' data-item-id='${item.id}'>
-  <li>
-  <span class='bookmark-item'>Title: ${item.title} </span>
-  <span class='bookmark-item'> | URL: ${item.url} </span>
-  <span class='bookmark-item'> | Rating: ${stars} </span>
-  </li>
+  <div class='box' data-item-id='${item.id}'>
+    <ul>
+      <li>
+        <span class='bookmark-item'><h3>${item.title}</h3></span>
+      </li>
+      <li>
+        <span class='bookmark-item'>URL: ${item.url} </span>
+      </li>
+      <li>
+        <span class='bookmark-item'>Rating: ${stars} </span>
+      </li>
+    </ul>
   </div>`;
 }
 
@@ -33,36 +39,59 @@ function generateBookmarkElementExpansion(item) {
     <div class='expanded-box' data-item-id='${item.id}'>
     <span class='bookmark-item'><br>Description: ${item.desc} </span>
     <button data-item-id='${item.id}' id='js-delete-button'>Delete</button>
+    <button data-item-id='${item.id}' id='js-visit-site-button'>Visit Site</button>
     </div>
     `;
 }
-
+{/* <form action="/action_page.php">
+  <label for="fname">First name:</label>
+  <input type="text" id="fname" name="fname"><br><br>
+  <label for="lname">Last name:</label>
+  <input type="text" id="lname" name="lname"><br><br>
+  <input type="submit" value="Submit">
+</form> */}
 function generateBookmarkForm() {
   return `
     <div>
-    <p>Please enter your bookmark</p>
-    <form id='js-bookmark-list-form'>
-      <input value='titleText' type='text' placeholder='Title' id='js-bookmark-title-entry' required />
-      <input value='https://google.com' type='url' placeholder='https://someWebsite.com' id='js-bookmark-url-entry' required />
-      <input value='descText' type='text' placeholder='Your description here' id='js-bookmark-description-entry' required />
-      
-      <select name='stars' id='js-rating-dropdown' required>
-        <option value='1'>Choose a rating</option>
-        <option value='1'>&#x2B50</option>
-        <option value='2'>&#x2B50&#x2B50</option>
-        <option value='3'>&#x2B50&#x2B50&#x2B50</option>
-        <option value='4'>&#x2B50&#x2B50&#x2B50&#x2B50</option>
-        <option value='5'>&#x2B50&#x2B50&#x2B50&#x2B50&#x2B50</option>
-        </select>
-        <button type='submit'>Submit</button>
-    </form>
-    
+      <p>Please enter your bookmark</p>
+      <fieldset>
+        <legend>Enter a new Bookmark</legend>
+        <form id='js-bookmark-list-form'>
+          <ul>
+            <li>
+              <label for='bookmarkName'>Bookmark name</label>
+              <input id='bookmarkName' name='bookmarkName' type='text' placeholder='Title' id='js-bookmark-title-entry' required />
+            </li>
+            <li>
+              <label for='url'>Website URL</label>
+              <input id='url' name='url' type='url' placeholder='https://someWebsite.com' id='js-bookmark-url-entry' required />
+            </li>
+            <li>
+              <label for='desc'>Description</label>
+              <input id='desc' name='desc' type='text' placeholder='Your description here' id='js-bookmark-description-entry' required />
+            </li>
+            <li>
+              <label for='stars'>Rating</label>
+              <select id='stars' name='stars' id='js-rating-dropdown' required>
+                <option value='1'>Choose a rating</option>
+                <option value='1'>&#x2B50</option>
+                <option value='2'>&#x2B50&#x2B50</option>
+                <option value='3'>&#x2B50&#x2B50&#x2B50</option>
+                <option value='4'>&#x2B50&#x2B50&#x2B50&#x2B50</option>
+                <option value='5'>&#x2B50&#x2B50&#x2B50&#x2B50&#x2B50</option>
+                </select>
+                <button type='submit'>Submit</button>
+            </li>
+          </ul>
+        </form>
+      </fieldset>
     </div>
     `;
 }
 
 function generateFilter(currentFilter) {
   return `<form id='js-rating-filter-form'>
+  <label for='js-rating-filter-dropdown'>Choose minimum rating to show</label>
   <select name='rating' id='js-rating-filter-dropdown' required>
         <option value=''>Current filter: ${currentFilter}</option>
         <option value='1'>&#x2B50</option>
@@ -222,6 +251,16 @@ function handleBookmarkDelete() {
   });
 }
 
+function handleVisitSite() {
+  // listen to the delete button of the li element of the bookmark, delete with an api call, re-render
+  $('main').on('click', '#js-visit-site-button', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const bookmarkId = $(event.currentTarget).attr('data-item-id');
+    window.open(store.findById(bookmarkId).url, '_blank');
+  });
+}
+
 function handleFilterSelect() {
   // listen to dropdown list, when a value is selected, hide all bookmark elements with fewer stars than the selection
   $('main').on('submit', '#js-rating-filter-form', function (event) {
@@ -232,18 +271,15 @@ function handleFilterSelect() {
   });
 }
 
-function handleGoToSite() {
-  // listen to Go To Site button on bookmark element, open site in new tab when pressed
-}
-
 function bindEventListeners() {
   // bind all event listeners at the start
-  handleGoToSite();
   handleFilterSelect();
   handleBookmarkDelete();
   handleBookmarkExpand();
   handleNewBookmarkSubmit();
+  handleVisitSite();
 }
+
 /*                                                                         
 88888888888                                                              
 88                                                                ,d     

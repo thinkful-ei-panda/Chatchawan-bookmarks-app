@@ -17,11 +17,9 @@ const addItem = function (item) {
 };
 
 const findAndDelete = function (id) {
-  console.log(this.bookmarks)
   this.bookmarks = this.bookmarks.filter(
     (currentItem) => currentItem.id !== id
   );
-  console.log(this.bookmarks)
 };
 
 const findAndUpdate = function (id, newData) {
